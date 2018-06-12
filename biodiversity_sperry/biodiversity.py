@@ -62,6 +62,8 @@ print species.scientific_name.nunique()
 species_categories = species.category.unique() 
 print species_categories
 print species.groupby('category').scientific_name.nunique()
+
+# Create Species by Category plot
 plt.pie(species.groupby('category').scientific_name.nunique(), labels=species_categories, autopct='%d%%')
 plt.axis('equal')
 plt.title("Species Categories")
@@ -97,11 +99,11 @@ print species.groupby('conservation_status').scientific_name.nunique().reset_ind
 
 protection_counts = species.groupby('conservation_status')    .scientific_name.count().reset_index()    .sort_values(by='scientific_name')
 
-
+# Create Conservations Status by Species plot 
 plt.figure(figsize=(10, 4))
 ax = plt.subplot()
 plt.bar(range(len(protection_counts)), protection_counts.scientific_name.values)
-
+# Add options
 ax.set_xticks(range(len(protection_counts)))
 ax.set_xticklabels(protection_counts.conservation_status.values)
 plt.ylabel('Number of Species')
@@ -159,11 +161,11 @@ print(protection_counts)
 
 # In[23]:
 
-
+# Create conservations statuses graph
 plt.figure(figsize=(10, 4))
 ax = plt.subplot()
 plt.bar(range(len(protection_counts)), protection_counts.scientific_name.values)
-
+# Add options
 ax.set_xticks(range(len(protection_counts)))
 ax.set_xticklabels(protection_counts.conservation_status.values)
 plt.ylabel('Number of Species')
@@ -182,13 +184,15 @@ plt.show()
 species['is_protected'] = species.conservation_status != 'No Intervention'
 print species.head()
 
+# Now that there is a new enumeration for conservation_status, recaluecate and plot the different statuses
 protection_counts = species.groupby('conservation_status')    .scientific_name.count().reset_index()    .sort_values(by='scientific_name')
 print protection_counts
 
+# Create new conservations statuses graph
 plt.figure(figsize=(10, 4))
 ax = plt.subplot()
 plt.bar(range(len(protection_counts)), protection_counts.scientific_name.values)
-
+# Add Options
 ax.set_xticks(range(len(protection_counts)))
 ax.set_xticklabels(protection_counts.conservation_status.values)
 plt.ylabel('Number of Species')
@@ -276,9 +280,10 @@ category_pivot
 
 # In[32]:
 
-
+# Determine number of mammal species that are protected and unprotected
 mammal_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['protected']
 mammal_not_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['not_protected']
+# Determine number of bird species that are protected and unprotected
 bird_protected = category_pivot[category_pivot['category'] == 'Bird'].iloc[0]['protected']
 bird_not_protected = category_pivot[category_pivot['category'] == 'Bird'].iloc[0]['not_protected']
 
@@ -313,9 +318,8 @@ print "p = %s" % chi2_contingency(contingency)[1]
 
 # In[35]:
 
-
-mammal_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['protected']
-mammal_not_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['not_protected']
+# Mammal quantities have been previously determined
+# Determine number of  reptile species that are protected and unprotected
 reptile_protected = category_pivot[category_pivot['category'] == 'Reptile'].iloc[0]['protected']
 reptile_not_protected = category_pivot[category_pivot['category'] == 'Reptile'].iloc[0]['not_protected']
 
@@ -330,12 +334,13 @@ print "p = %s" % chi2_contingency(contingency)[1]
 # In[36]:
 
 
-mammal_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['protected']
-mammal_not_protected = category_pivot[category_pivot['category'] == 'Mammal'].iloc[0]['not_protected']
+# Mammal quantities have been previously determined
 
+# Create Dataframe for all categories' p value relative to mammals
 relation_to_mammals = pd.DataFrame({'Category':species_categories})
 relation_to_mammals['P Value'] = relation_to_mammals.apply(lambda _: '', axis=1)
 
+# Gnerate the p values for all categories iteratively
 for group in species_categories:
     group_protected = category_pivot[category_pivot['category'] == group].iloc[0]['protected']
     group_not_protected = category_pivot[category_pivot['category'] == group].iloc[0]['not_protected']
@@ -457,14 +462,14 @@ obs_by_park
 
 # In[46]:
 
-
+# Create Observations by Park plot
 num_parks = len(obs_by_park)
 plt.figure(figsize=(16, 4))
 ax = plt.subplot()
 plt.bar(range(num_parks), obs_by_park.observations.values)
 ax.set_xticks(range(num_parks))
 ax.set_xticklabels(obs_by_park.park_name.values)
-
+# Add options
 plt.ylabel('Number of Observations')
 plt.title('Observations of Sheep per Week')
 plt.show()
@@ -486,6 +491,7 @@ minimum_detectable_effect = 100 * (target_effect / afflicated_pop)
 baseline = 15
 statistical_sig = 0.90
 
+#Using external sample size calculator:
 sample_size_per_variation = 510
 
 
